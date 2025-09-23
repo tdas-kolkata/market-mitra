@@ -11,6 +11,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init-multiple-dbs.sql:/docker-entrypoint-initdb.d/init-multiple-dbs.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser"]
 
   adminer:
     image: adminer:latest
@@ -29,18 +31,28 @@ services:
       PREFECT_SERVER__DATABASE__CONNECTION_URL: postgresql+asyncpg://myuser:mypassword@postgres-db:5432/prefect_db
     ports:
       - "4200:4200"
-    command: prefect server start --host 0.0.0.0 --port 4200
+    command: >
+      bash -c "apt-get update && apt-get install -y curl && prefect server start --host 0.0.0.0 --port 4200 & echo 'Waiting for Prefect server...'; until curl -s http://localhost:4200/api/health | grep -q '\"database\":\"healthy\"'; do sleep 2; done; echo 'Server healthy!'; prefect work-pool ls | grep -q etl-workers || prefect work-pool create etl-workers --type process;"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:4200/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
 
   prefect-worker:
-    image: prefecthq/prefect:3-latest
+    build:
+      context: .
+      dockerfile: ./worker_base_img/Dockerfile
     container_name: prefect-worker
-    command: prefect worker start -p etl-workers
     environment:
       PREFECT_API_URL: http://prefect:4200/api
     depends_on:
-      - prefect
+      prefect:
+        condition: service_healthy
 
 volumes:
   postgres_data:
