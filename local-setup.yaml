@@ -10,14 +10,37 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      
+      - ./init-multiple-dbs.sql:/docker-entrypoint-initdb.d/init-multiple-dbs.sql
+
   adminer:
     image: adminer:latest
     container_name: adminer
     environment:
       ADMINER_DEFAULT_SERVER: postgres-db
+      ADMINER_DEFAULT_DB_DRIVER: pgsql
     ports:
       - "8080:8080"
+
+  prefect:
+    image: prefecthq/prefect:3-latest
+    container_name: prefect-server
+    environment:
+      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://myuser:mypassword@postgres-db:5432/prefect_db
+      PREFECT_SERVER__DATABASE__CONNECTION_URL: postgresql+asyncpg://myuser:mypassword@postgres-db:5432/prefect_db
+    ports:
+      - "4200:4200"
+    command: prefect server start --host 0.0.0.0 --port 4200
+    depends_on:
+      - postgres
+
+  prefect-worker:
+    image: prefecthq/prefect:3-latest
+    container_name: prefect-worker
+    command: prefect worker start -p etl-workers
+    environment:
+      PREFECT_API_URL: http://prefect:4200/api
+    depends_on:
+      - prefect
 
 volumes:
   postgres_data:
