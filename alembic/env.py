@@ -4,7 +4,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from models.common_base import Base  # Import all models so Base.metadata includes all tables
+from jobs.models.common_base import Base  # Import all models so Base.metadata includes all tables
 
 from dotenv import load_dotenv
 import os
