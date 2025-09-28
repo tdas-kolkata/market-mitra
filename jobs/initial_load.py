@@ -25,11 +25,8 @@ def transform_data(raw_df:pd.DataFrame) -> pd.DataFrame:
     transformed_df["Symbol"] = transformed_df["Symbol"] + ".NS"
     return transformed_df
 
-@flow(log_prints=True)
-def load_company_details_flow():
-    raw_df = read_data()
-    transformed_df = transform_data(raw_df)
-    print(transformed_df)
+@task
+def load_data(transformed_df:pd.DataFrame):
     df_records = transformed_df.to_dict(orient="records")
     validated_companies = []
     for record in df_records:
@@ -48,6 +45,13 @@ def load_company_details_flow():
         except Exception as e:
             session.rollback()
             print(f"An error occurred: {e}")
+
+@flow(log_prints=True)
+def load_company_details_flow():
+    raw_df = read_data()
+    transformed_df = transform_data(raw_df)
+    load_data(transformed_df)
+    
     
 
 
