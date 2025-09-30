@@ -13,8 +13,8 @@ dotenv.load_dotenv(dotenv_path)
 
 
 @task
-def read_data()-> pd.DataFrame:
-    df = pd.read_csv(Path("./ref-data/companies/ind_nifty50_list.csv"))
+def read_data(file_name:str)-> pd.DataFrame:
+    df = pd.read_csv(Path("./ref-data/companies/{file_name}"))
     return df
 
 @task
@@ -47,8 +47,8 @@ def load_data(transformed_df:pd.DataFrame):
             print(f"An error occurred: {e}")
 
 @flow(log_prints=True)
-def load_company_details_flow():
-    raw_df = read_data()
+def load_company_details_flow(file_name:str):
+    raw_df = read_data(file_name)
     transformed_df = transform_data(raw_df)
     load_data(transformed_df)
     
@@ -56,4 +56,4 @@ def load_company_details_flow():
 
 
 if __name__ == "__main__":
-    load_company_details_flow()
+    load_company_details_flow(file_name="ind_nifty50_list.csv")
