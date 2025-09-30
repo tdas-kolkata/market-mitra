@@ -14,7 +14,7 @@ dotenv.load_dotenv(dotenv_path)
 
 @task
 def read_data(file_name:str)-> pd.DataFrame:
-    df = pd.read_csv(Path("./ref-data/companies/{file_name}"))
+    df = pd.read_csv(Path(f"./ref-data/companies/{file_name}"))
     return df
 
 @task
