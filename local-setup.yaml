@@ -50,6 +50,7 @@ services:
     container_name: prefect-worker
     environment:
       PREFECT_API_URL: http://prefect:4200/api
+      DB_URL: postgresql+psycopg2://myuser:mypassword@postgres:5432/market-mitra
     depends_on:
       prefect:
         condition: service_healthy

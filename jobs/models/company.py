@@ -6,13 +6,12 @@ from typing import Optional
 class Company(comm_base):
     __tablename__ = "companies"
 
-    id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)            # Company Name
     industry = Column(String, nullable=False)        # Industry
     symbol = Column(String, unique=True, nullable=False)  # Stock symbol
     country = Column(String, nullable=False)  # Stock symbol
     source = Column(String, nullable=False)  # Stock symbol
-    isin_code = Column(String, unique=True, nullable=False)  # ISIN Code
+    isin_code = Column(String, primary_key=True, index=True)  # ISIN Code
 
 
 class CompanyModel(BaseModel):
