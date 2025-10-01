@@ -18,9 +18,9 @@ def read_data(file_name:str)-> pd.DataFrame:
     return df
 
 @task
-def transform_data(raw_df:pd.DataFrame) -> pd.DataFrame:
+def transform_data(raw_df:pd.DataFrame, file_name:str) -> pd.DataFrame:
     transformed_df = raw_df
-    transformed_df["Source"] = "Nifty50"
+    transformed_df["Source"] = file_name
     transformed_df["Country"] = "IND"
     transformed_df["Symbol"] = transformed_df["Symbol"] + ".NS"
     return transformed_df
@@ -49,7 +49,7 @@ def load_data(transformed_df:pd.DataFrame):
 @flow(log_prints=True)
 def load_company_details_flow(file_name:str):
     raw_df = read_data(file_name)
-    transformed_df = transform_data(raw_df)
+    transformed_df = transform_data(raw_df, file_name)
     load_data(transformed_df)
     
     

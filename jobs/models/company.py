@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, String
 from .common_base import Base as comm_base
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
