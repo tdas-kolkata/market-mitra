@@ -1,4 +1,4 @@
-sevices:
+services:
   prefect:
     image: prefecthq/prefect:3-latest
     container_name: prefect-server
