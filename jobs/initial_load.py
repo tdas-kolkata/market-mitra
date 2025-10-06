@@ -35,8 +35,15 @@ def load_data(transformed_df:pd.DataFrame):
             validated_companies.append(validated_company.model_dump())
         except ValidationError as e:
             raise(e)
-    engine = create_engine(os.getenv("DB_URL"))
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    try:
+        engine = create_engine(os.getenv("DB_URL"))
+        # Try connecting to the database to check connectivity
+        with engine.connect() as _:
+            pass
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    except Exception as conn_err:
+        print(f"Database connection failed: {conn_err}")
+        raise
     with SessionLocal() as session:
         try:
             session.bulk_insert_mappings(Company, validated_companies)
