@@ -22,7 +22,7 @@ services:
       dockerfile: ./worker_base_img/Dockerfile
     container_name: prefect-worker
     environment:
-      PREFECT_API_URL: http://prefect:4200/api
+      PREFECT_API_URL: ${PREFECT_API_URL}
       DB_URL: ${DB_URL}
     depends_on:
       prefect:

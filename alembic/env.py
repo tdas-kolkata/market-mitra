@@ -17,7 +17,7 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
 # access to the values within the .ini file in use.
 config = context.config
 # Set sqlalchemy.url from environment variable
-db_url = os.getenv("DB_URL")
+db_url = os.getenv("ALEMBIC_DB_URL")
 if db_url:
     config.set_main_option("sqlalchemy.url", db_url)
 

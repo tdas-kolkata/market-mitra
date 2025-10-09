@@ -5,7 +5,6 @@ services:
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: market-mitra
     ports:
       - "5432:5432"
     volumes:
@@ -27,7 +26,7 @@ services:
     image: prefecthq/prefect:3-latest
     container_name: prefect-server
     environment:
-      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://myuser:mypassword@postgres-db:5432/prefect_db
+      PREFECT_API_DATABASE_CONNECTION_URL: ${PREFECT_API_DATABASE_CONNECTION_URL}
     ports:
       - "4200:4200"
     command: >
