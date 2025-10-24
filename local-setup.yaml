@@ -28,6 +28,7 @@ services:
     environment:
       PREFECT_API_DATABASE_CONNECTION_URL: ${PREFECT_API_DATABASE_CONNECTION_URL}
       PREFECT_LOGGING_LEVEL: ${PREFECT_LOGGING_LEVEL}
+      PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS: ${PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS}
     ports:
       - "4200:4200"
     command: >
@@ -50,6 +51,7 @@ services:
     environment:
       PREFECT_API_URL: http://prefect:4200/api
       DB_URL: ${DB_URL}
+      PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS: ${PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS}
     depends_on:
       prefect:
         condition: service_healthy
