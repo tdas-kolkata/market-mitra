@@ -9,7 +9,7 @@ class Company(comm_base):
     name = Column(String, nullable=False)            # Company Name
     industry = Column(String, nullable=False)        # Industry
     symbol = Column(String, unique=True, nullable=False)  # Stock symbol
-    country = Column(String, nullable=False)  # Stock symbol
+    country = Column(String, nullable=False)  # added the origin country
     source = Column(String, nullable=False)  # Stock symbol
     isin_code = Column(String, primary_key=True, index=True)  # ISIN Code
 

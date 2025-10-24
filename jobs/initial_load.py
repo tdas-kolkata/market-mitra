@@ -60,6 +60,7 @@ def load_data(transformed_df:pd.DataFrame):
         except Exception as e:
             session.rollback()
             logger.error(f"An error occurred: {e}")
+            raise e
 
 @flow(log_prints=True)
 def load_company_details_flow(file_name:str):
