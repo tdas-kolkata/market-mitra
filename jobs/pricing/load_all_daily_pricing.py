@@ -32,9 +32,9 @@ async def run_load_daily_pricing(symbol, isin_code, period):
     await asyncio.to_thread(load_daily_pricing,symbol, isin_code, period)
 
 @flow(log_prints=True)
-async def load_all_daily_pricing(period:str = '1d', concurrency_limit:int = 3):
+def load_all_daily_pricing(period:str = '1d', concurrency_limit:int = 3):
     logger = get_run_logger()
-    companies = await get_company_list()
+    companies = get_company_list.submit().result()
     logger.info(f"Pulling data for {len(companies)} companies")
     futures = []
 
