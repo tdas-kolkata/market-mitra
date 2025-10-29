@@ -40,10 +40,10 @@ async def load_all_daily_pricing(period:str = '1d', concurrency_limit:int = 3):
     async def limited_task(i, symbol, isin_code, period):
         async with semaphore:
             logger.info(f"Starting the loading- {i} - {symbol}")
-            await run_load_daily_pricing(symbol, isin_code, period)
+            await run_load_daily_pricing.submit(symbol, isin_code, period)
             logger.info(f"Completed the loading- {i} - {symbol}")
 
     await asyncio.gather(*(limited_task(i,company.symbol, company.isin_code, period) for i, company in enumerate(companies)))
 
 if __name__ == '__main__':
-    asyncio.run(load_all_daily_pricing(period='1y'))
+    asyncio.run(load_all_daily_pricing(period='1d'))
