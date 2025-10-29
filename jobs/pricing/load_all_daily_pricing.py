@@ -2,9 +2,10 @@ import os
 import sys
 import dotenv
 from prefect import flow, task, get_run_logger
-from sqlalchemy import create_engine,select
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import create_async_engine
 from daily.load_daily_pricing import load_daily_pricing
+import asyncio
 
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
@@ -15,39 +16,34 @@ from models.company import Company  # noqa: E402
 
 
 @task
-def get_company_list()->list[Company]:
+async def get_company_list()->list[Company]:
     logger = get_run_logger()
-    engine = create_engine(os.getenv("DB_URL"))
-    with engine.connect() as _:
-        logger.info("Successfully connected to the database")
-
-    Localsession = sessionmaker(bind=engine)
+    engine = create_async_engine(os.getenv("DB_URL_ASYNC"))
     statement = select(Company.name, Company.isin_code, Company.symbol)
     logger.info(f"Running SQL - {statement.compile()}")
-
-    with Localsession() as session:
-        companies = session.execute(statement).all()
-        logger.info(f"Fetch company records for {len(companies)} companies")
+    async with engine.connect() as conn:
+        logger.info("Successfully connected to the database")
+        results = await conn.execute(statement)
+        companies = results.fetchall()
     return companies
 
 @task(tags=["pricing-child-flows"])
-def run_load_daily_pricing(symbol, isin_code, period):
-    load_daily_pricing(symbol, isin_code, period)
+async def run_load_daily_pricing(symbol, isin_code, period):
+    await asyncio.to_thread(load_daily_pricing,symbol, isin_code, period)
 
 @flow(log_prints=True)
-def load_all_daily_pricing(period:str = '1d'):
+async def load_all_daily_pricing(period:str = '1d', concurrency_limit:int = 3):
     logger = get_run_logger()
-    companies = get_company_list()
-    futures = []
+    companies = await get_company_list()
+    semaphore = asyncio.Semaphore(concurrency_limit)
 
-    for i, company in enumerate(companies):
-        logger.info(f"Starting the loading- {i} - {company.name}")
-        f = run_load_daily_pricing.submit(company.symbol, company.isin_code, period)
-        futures.append(f)
-        logger.info(f"Completed the loading- {i} - {company.name}")
+    async def limited_task(i, symbol, isin_code, period):
+        async with semaphore:
+            logger.info(f"Starting the loading- {i} - {symbol}")
+            await run_load_daily_pricing(symbol, isin_code, period)
+            logger.info(f"Completed the loading- {i} - {symbol}")
 
-    for f in futures:
-        f.result()
+    await asyncio.gather(*(limited_task(i,company.symbol, company.isin_code, period) for i, company in enumerate(companies)))
 
 if __name__ == '__main__':
-    load_all_daily_pricing(period='1y')
+    asyncio.run(load_all_daily_pricing(period='1y'))
