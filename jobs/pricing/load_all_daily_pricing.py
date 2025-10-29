@@ -56,5 +56,5 @@ def load_all_daily_pricing(period:str = '1d', concurrency_limit:int = 3):
 
     # await asyncio.gather(*(limited_task(i,company.symbol, company.isin_code, period) for i, company in enumerate(companies)))
 
-if __name__ == '__main__':
-    asyncio.run(load_all_daily_pricing(period='1d'))
+# if __name__ == '__main__':
+#     load_all_daily_pricing(period='1d')
