@@ -35,15 +35,25 @@ async def run_load_daily_pricing(symbol, isin_code, period):
 async def load_all_daily_pricing(period:str = '1d', concurrency_limit:int = 3):
     logger = get_run_logger()
     companies = await get_company_list()
-    semaphore = asyncio.Semaphore(concurrency_limit)
+    futures = []
 
-    async def limited_task(i, symbol, isin_code, period):
-        async with semaphore:
-            logger.info(f"Starting the loading- {i} - {symbol}")
-            run_load_daily_pricing.submit(symbol, isin_code, period)
-            logger.info(f"Completed the loading- {i} - {symbol}")
+    for i, company in enumerate(companies):
+        logger.info(f"Starting the loading- {i} - {company.name}")
+        f = run_load_daily_pricing.submit(company.symbol, company.isin_code, period)
+        futures.append(f)
+        logger.info(f"Completed the loading- {i} - {company.name}")
 
-    await asyncio.gather(*(limited_task(i,company.symbol, company.isin_code, period) for i, company in enumerate(companies)))
+    for f in futures:
+        f.result()
+    # semaphore = asyncio.Semaphore(concurrency_limit)
+
+    # async def limited_task(i, symbol, isin_code, period):
+    #     async with semaphore:
+    #         logger.info(f"Starting the loading- {i} - {symbol}")
+    #         run_load_daily_pricing.submit(symbol, isin_code, period)
+    #         logger.info(f"Completed the loading- {i} - {symbol}")
+
+    # await asyncio.gather(*(limited_task(i,company.symbol, company.isin_code, period) for i, company in enumerate(companies)))
 
 if __name__ == '__main__':
     asyncio.run(load_all_daily_pricing(period='1d'))
