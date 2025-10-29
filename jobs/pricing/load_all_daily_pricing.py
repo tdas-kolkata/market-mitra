@@ -35,6 +35,7 @@ async def run_load_daily_pricing(symbol, isin_code, period):
 async def load_all_daily_pricing(period:str = '1d', concurrency_limit:int = 3):
     logger = get_run_logger()
     companies = await get_company_list()
+    logger.info(f"Pulling data for {len(companies)} companies")
     futures = []
 
     for i, company in enumerate(companies):
