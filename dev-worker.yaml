@@ -1,0 +1,10 @@
+prefect-worker:
+  build:
+    context: .
+    dockerfile: ./worker_base_img/Dockerfile
+  container_name: prefect-worker
+  environment:
+    PREFECT_API_URL: ${PREFECT_API_URL}
+    DB_URL: ${DB_URL}
+    PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS: ${PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS}
+    DB_URL_ASYNC: ${DB_URL_ASYNC}
