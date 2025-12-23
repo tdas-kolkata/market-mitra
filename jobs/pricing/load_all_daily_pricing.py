@@ -34,7 +34,7 @@ async def load_all_daily_pricing(period:str = '1d', concurrency_limit:int = 3):
     logger.info(f"Pulling data for {len(companies)} companies")
 
     for i, company in enumerate(companies):
-        await run_deployment(
+        flow_run  = await run_deployment(
             name="load-daily-pricing/single-pricing-load",
             parameters={
                 "symbol": company.symbol,
@@ -44,6 +44,7 @@ async def load_all_daily_pricing(period:str = '1d', concurrency_limit:int = 3):
             timeout=0,
             as_subflow=True
         )
+        await flow_run.wait()
 
 
 if __name__ == '__main__':
