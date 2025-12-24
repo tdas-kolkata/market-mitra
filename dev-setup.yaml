@@ -22,6 +22,7 @@ services:
       context: .
       dockerfile: ./worker_base_img/Dockerfile
     container_name: prefect-worker
+    restart: on-failure
     environment:
       PREFECT_API_URL: ${PREFECT_API_URL}
       DB_URL: ${DB_URL}
