@@ -34,6 +34,7 @@ async def load_all_daily_pricing(period:str = '1d'):
     logger.info(f"Pulling data for {len(companies)} companies")
 
     for i, company in enumerate(companies):
+        logger.info(f"Deploying jobs for {company.symbol}")
         await run_deployment(
             name="load-daily-pricing/single-pricing-load",
             parameters={

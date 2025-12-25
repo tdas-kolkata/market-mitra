@@ -8,6 +8,7 @@ services:
       PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS: ${PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS}
     ports:
       - "4200:4200"
+    restart: unless-stopped
     command: >
       bash -c "apt-get update && apt-get install -y curl && prefect server start --host 0.0.0.0 --port 4200 & echo 'Waiting for Prefect server...'; until curl -s http://localhost:4200/api/health | grep -q '\"database\":\"healthy\"'; do sleep 2; done; echo 'Server healthy!'; prefect work-pool ls | grep -q etl-workers || prefect work-pool create etl-workers --type process;"
     healthcheck:
