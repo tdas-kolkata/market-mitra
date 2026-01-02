@@ -6,7 +6,7 @@ from prefect import flow, task, get_run_logger
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import create_async_engine
 from prefect.deployments import run_deployment
-from daily.load_daily_pricing import load_daily_pricing_task, load_daily_pricing
+from daily.load_daily_pricing import load_daily_pricing
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
 dotenv.load_dotenv(dotenv_path)
