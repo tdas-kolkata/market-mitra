@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
-from sqlalchemy import Column, DateTime, Float, Integer, ForeignKey, VARCHAR, PrimaryKeyConstraint
+from sqlalchemy import Column, DateTime, Float, ForeignKey, VARCHAR, PrimaryKeyConstraint, BigInteger
 from .common_base import Base as comm_base
 
 class PriceModel(BaseModel):
@@ -29,7 +29,7 @@ class Price(comm_base):
     high = Column(Float, nullable=False)
     low = Column(Float, nullable=False)
     close = Column(Float, nullable=False)
-    volume = Column(Integer, nullable=False)
+    volume = Column(BigInteger, nullable=False)
     dividends = Column(Float, default=0.0)
     stock_splits = Column(Float, default=0.0)
     stock = Column(VARCHAR, nullable=False, index=True)

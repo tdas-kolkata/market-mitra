@@ -1,26 +1,26 @@
 services:
-  postgres:
-    image: postgres:latest
-    container_name: postgres-db
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-multiple-dbs.sql:/docker-entrypoint-initdb.d/init-multiple-dbs.sql
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U myuser"]
+  # postgres:
+  #   image: postgres:latest
+  #   container_name: postgres-db
+  #   environment:
+  #     POSTGRES_USER: myuser
+  #     POSTGRES_PASSWORD: mypassword
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./init-multiple-dbs.sql:/docker-entrypoint-initdb.d/init-multiple-dbs.sql
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U myuser"]
 
-  adminer:
-    image: adminer:latest
-    container_name: adminer
-    environment:
-      ADMINER_DEFAULT_SERVER: postgres-db
-      ADMINER_DEFAULT_DB_DRIVER: pgsql
-    ports:
-      - "8080:8080"
+  # adminer:
+  #   image: adminer:latest
+  #   container_name: adminer
+  #   environment:
+  #     ADMINER_DEFAULT_SERVER: postgres-db
+  #     ADMINER_DEFAULT_DB_DRIVER: pgsql
+  #   ports:
+  #     - "8080:8080"
 
   prefect:
     image: prefecthq/prefect:3-latest
@@ -33,9 +33,9 @@ services:
       - "4200:4200"
     command: >
       bash -c "apt-get update && apt-get install -y curl && prefect server start --host 0.0.0.0 --port 4200 & echo 'Waiting for Prefect server...'; until curl -s http://localhost:4200/api/health | grep -q '\"database\":\"healthy\"'; do sleep 2; done; echo 'Server healthy!'; prefect work-pool ls | grep -q etl-workers || prefect work-pool create etl-workers --type process;"
-    depends_on:
-      postgres:
-        condition: service_healthy
+    # depends_on:
+    #   postgres:
+    #     condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl --fail http://localhost:4200/api/health"]
       interval: 30s

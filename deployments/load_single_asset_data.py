@@ -9,5 +9,5 @@ if __name__ =='__main__':
         work_pool_name="etl-workers",
         description="Loads price history of a single asset",
         tags=["python"],
-        concurrency_limit=2
+        concurrency_limit=2,
     )
