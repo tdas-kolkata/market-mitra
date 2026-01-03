@@ -68,11 +68,16 @@ def load_data(transformed_df:pd.DataFrame):
             logger.error(f"An error occurred: {e}")
             raise e
 
-@flow(log_prints=True)
-def load_company_details_flow(file_name:FILESOURCE = FILESOURCE.NIFTY50):
+@task
+def process_file(file_name:str):
     raw_df = read_data(file_name)
     transformed_df = transform_data(raw_df, file_name)
     load_data(transformed_df)
+
+@flow(log_prints=True)
+def load_company_details_flow(file_names:list[FILESOURCE]):
+    for file_name in file_names:
+        process_file.submit(file_name)
     
     
 
