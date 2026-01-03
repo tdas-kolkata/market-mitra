@@ -77,8 +77,7 @@ def process_file(file_name:FILESOURCE):
 
 @flow(log_prints=True)
 def load_company_details_flow(file_names:list[FILESOURCE]):
-    for file_name in file_names:
-        process_file.submit(file_name)
+    process_file.map(file_names)
     
     
 
