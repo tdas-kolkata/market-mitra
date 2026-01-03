@@ -21,7 +21,7 @@ class FILESOURCE(str, Enum):
 @task
 def read_data(file_name:FILESOURCE)-> pd.DataFrame:
     logger = get_run_logger()
-    original_file_name = str(file_name)
+    original_file_name = file_name.value
     filename = f"./ref-data/companies/{original_file_name}"
     logger.info(f"looking for file - {original_file_name} 📖")
     df = pd.read_csv(Path(filename))
@@ -32,7 +32,7 @@ def transform_data(raw_df:pd.DataFrame, file_name:FILESOURCE) -> pd.DataFrame:
     logger = get_run_logger()
     logger.info("Transforming the raw data 👨‍🔧")
     transformed_df = raw_df
-    transformed_df["Source"] = str(file_name)
+    transformed_df["Source"] = file_name.value
     transformed_df["Country"] = "IND"
     transformed_df["Symbol"] = transformed_df["Symbol"] + ".NS"
     return transformed_df
