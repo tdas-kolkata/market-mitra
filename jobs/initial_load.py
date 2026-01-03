@@ -7,10 +7,16 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from pydantic import ValidationError
+from enum import Enum
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 dotenv.load_dotenv(dotenv_path)
 
+class FILESOURCE(str, Enum):
+    NIFTY50 = "ind_nifty50_list.csv"
+    NIFTY_NEXT_50 = "ind_niftynext50_list.csv"
+    NIFTY_MIDCAP_150 = "ind_niftymidcap150_list.csv"
+    NIFTY_SMALLCAP_250 = "ind_niftysmallcap250_list.csv"
 
 @task
 def read_data(file_name:str)-> pd.DataFrame:
@@ -63,7 +69,7 @@ def load_data(transformed_df:pd.DataFrame):
             raise e
 
 @flow(log_prints=True)
-def load_company_details_flow(file_name:str):
+def load_company_details_flow(file_name:FILESOURCE):
     raw_df = read_data(file_name)
     transformed_df = transform_data(raw_df, file_name)
     load_data(transformed_df)
