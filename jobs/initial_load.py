@@ -69,7 +69,7 @@ def load_data(transformed_df:pd.DataFrame):
             raise e
 
 @flow(log_prints=True)
-def load_company_details_flow(file_name:FILESOURCE):
+def load_company_details_flow(file_name:FILESOURCE = FILESOURCE.NIFTY50):
     raw_df = read_data(file_name)
     transformed_df = transform_data(raw_df, file_name)
     load_data(transformed_df)

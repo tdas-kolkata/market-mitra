@@ -17,7 +17,7 @@ from models.company import Company  # noqa: E402
 
 class RUNMODE(str, Enum):
     SYNC = "sync"
-    ASYNC = 'async'
+    ASYNC = "async"
 
 @task
 async def get_company_list()->list[Company]:
