@@ -19,19 +19,20 @@ class FILESOURCE(str, Enum):
     NIFTY_SMALLCAP_250 = "ind_niftysmallcap250_list.csv"
 
 @task
-def read_data(file_name:str)-> pd.DataFrame:
+def read_data(file_name:FILESOURCE)-> pd.DataFrame:
     logger = get_run_logger()
-    filename = f"./ref-data/companies/{file_name}"
-    logger.info(f"looking for file - {filename} 📖")
+    original_file_name = str(file_name)
+    filename = f"./ref-data/companies/{original_file_name}"
+    logger.info(f"looking for file - {original_file_name} 📖")
     df = pd.read_csv(Path(filename))
     return df
 
 @task
-def transform_data(raw_df:pd.DataFrame, file_name:str) -> pd.DataFrame:
+def transform_data(raw_df:pd.DataFrame, file_name:FILESOURCE) -> pd.DataFrame:
     logger = get_run_logger()
     logger.info("Transforming the raw data 👨‍🔧")
     transformed_df = raw_df
-    transformed_df["Source"] = file_name
+    transformed_df["Source"] = str(file_name)
     transformed_df["Country"] = "IND"
     transformed_df["Symbol"] = transformed_df["Symbol"] + ".NS"
     return transformed_df
@@ -69,7 +70,7 @@ def load_data(transformed_df:pd.DataFrame):
             raise e
 
 @task
-def process_file(file_name:str):
+def process_file(file_name:FILESOURCE):
     raw_df = read_data(file_name)
     transformed_df = transform_data(raw_df, file_name)
     load_data(transformed_df)
