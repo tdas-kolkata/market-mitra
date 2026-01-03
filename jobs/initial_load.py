@@ -69,26 +69,14 @@ def load_data(transformed_df:pd.DataFrame):
             logger.error(f"An error occurred: {e}")
             raise e
 
-@task
-def process_file(file_name:FILESOURCE):
+
+@flow(log_prints=True)
+def load_company_details_flow(file_name:FILESOURCE):
     raw_df = read_data(file_name)
     transformed_df = transform_data(raw_df, file_name)
     load_data(transformed_df)
-
-@flow(log_prints=True)
-def load_company_details_flow(file_names:list[FILESOURCE]):
-    logger = get_run_logger()
-    for file_name in file_names:
-        try:
-            raw_df = read_data(file_name)
-            transformed_df = transform_data(raw_df, file_name)
-            load_data(transformed_df)
-        except Exception as e:
-            logger.warning(e)
-            continue
-    
     
 
 
 if __name__ == "__main__":
-    load_company_details_flow(file_names=["ind_nifty50_list.csv"])
+    load_company_details_flow(file_names="ind_nifty50_list.csv")
