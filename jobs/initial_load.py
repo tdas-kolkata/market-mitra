@@ -71,9 +71,9 @@ def load_data(transformed_df:pd.DataFrame):
 
 @flow(flow_run_name="process-file-{file_name}")
 def process_file(file_name:str):
-    raw_df = read_data(file_name)
-    transformed_df = transform_data(raw_df, file_name)
-    load_data(transformed_df)
+    raw_df = read_data.submit(file_name).result()
+    transformed_df = transform_data.submit(raw_df, file_name).result()
+    load_data.submit(transformed_df)
 
 @flow(log_prints=True)
 def load_company_details_flow(file_names:list[FILESOURCE]):
