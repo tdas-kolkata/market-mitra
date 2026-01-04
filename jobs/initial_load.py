@@ -19,20 +19,19 @@ class FILESOURCE(str, Enum):
     NIFTY_SMALLCAP_250 = "ind_niftysmallcap250_list.csv"
 
 @task
-def read_data(file_name:FILESOURCE)-> pd.DataFrame:
+def read_data(file_name:str)-> pd.DataFrame:
     logger = get_run_logger()
-    original_file_name = file_name.value
-    filename = f"./ref-data/companies/{original_file_name}"
-    logger.info(f"looking for file - {original_file_name} 📖")
+    filename = f"./ref-data/companies/{file_name}"
+    logger.info(f"looking for file - {file_name} 📖")
     df = pd.read_csv(Path(filename))
     return df
 
 @task
-def transform_data(raw_df:pd.DataFrame, file_name:FILESOURCE) -> pd.DataFrame:
+def transform_data(raw_df:pd.DataFrame, file_name:str) -> pd.DataFrame:
     logger = get_run_logger()
     logger.info("Transforming the raw data 👨‍🔧")
     transformed_df = raw_df
-    transformed_df["Source"] = file_name.value
+    transformed_df["Source"] = file_name
     transformed_df["Country"] = "IND"
     transformed_df["Symbol"] = transformed_df["Symbol"] + ".NS"
     return transformed_df
@@ -49,7 +48,7 @@ def load_data(transformed_df:pd.DataFrame):
             logger.debug(f"Validation passed - {validated_company.name}")
         except ValidationError as e:
             logger.error(f"Validation failed for {record["Company Name"]}")
-            raise(e)
+            raise e
     try:
         engine = create_engine(os.getenv("DB_URL"))
         # Try connecting to the database to check connectivity
@@ -70,13 +69,22 @@ def load_data(transformed_df:pd.DataFrame):
             raise e
 
 
-@flow(log_prints=True)
-def load_company_details_flow(file_name:FILESOURCE):
+@task(task_run_name="process-file-{file_name}")
+def process_file(file_name:str):
     raw_df = read_data(file_name)
     transformed_df = transform_data(raw_df, file_name)
     load_data(transformed_df)
+
+@flow(log_prints=True)
+def load_company_details_flow(file_names:list[FILESOURCE]):
+    futures = []
+    for file_name in file_names:
+        futures.append(process_file.submit(file_name.value))
+
+    for f in futures:
+        f.wait()
     
 
 
 if __name__ == "__main__":
-    load_company_details_flow(file_names="ind_nifty50_list.csv")
+    load_company_details_flow(file_names=["ind_nifty50_list.csv", "ind_niftymidcap150_list.csv"])

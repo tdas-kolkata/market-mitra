@@ -62,7 +62,7 @@ def load_pricing(price_history:pd.DataFrame):
             logger.error(f"An error occurred: {e}")
             raise e
 
-@flow(log_prints=True)
+@flow(log_prints=True, flow_run_name="daily-price-{symbol}-{period}")
 def load_daily_pricing(symbol:str, isin_code:str, period: str):
     logger = get_run_logger()
     pricing_history = extract_pricing(symbol, period)
