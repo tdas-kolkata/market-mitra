@@ -77,12 +77,10 @@ def process_file(file_name:str):
 
 @flow(log_prints=True)
 def load_company_details_flow(file_names:list[FILESOURCE]):
-    futures = []
     for file_name in file_names:
-        futures.append(process_file.submit(file_name.value))
-
-    for f in futures:
-        f.wait()
+        raw_df = read_data(file_name)
+        transformed_df = transform_data(raw_df, file_name)
+        load_data(transformed_df)
     
 
 
