@@ -69,7 +69,7 @@ def load_data(transformed_df:pd.DataFrame):
             raise e
 
 
-@task(task_run_name="process-file-{file_name}")
+@flow(flow_run_name="process-file-{file_name}")
 def process_file(file_name:str):
     raw_df = read_data(file_name)
     transformed_df = transform_data(raw_df, file_name)
@@ -78,9 +78,8 @@ def process_file(file_name:str):
 @flow(log_prints=True)
 def load_company_details_flow(file_names:list[FILESOURCE]):
     for file_name in file_names:
-        raw_df = read_data(file_name)
-        transformed_df = transform_data(raw_df, file_name)
-        load_data(transformed_df)
+        process_file(file_name.value)
+
     
 
 
