@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, DateTime, func
 from .common_base import Base as comm_base
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
@@ -12,6 +12,12 @@ class Company(comm_base):
     country = Column(String, nullable=False)  # added the origin country
     source = Column(String, nullable=False)  # Stock symbol
     isin_code = Column(String, primary_key=True, index=True)  # ISIN Code
+    last_updated_at = Column(
+        DateTime(timezone=True), 
+        server_default=func.now(), 
+        server_onupdate=func.now(), 
+        onupdate=func.now()
+        )
 
 
 class CompanyModel(BaseModel):

@@ -36,6 +36,32 @@ def transform_data(raw_df:pd.DataFrame, file_name:str) -> pd.DataFrame:
     transformed_df["Symbol"] = transformed_df["Symbol"] + ".NS"
     return transformed_df
 
+@task(log_prints = True)
+def remove_existing_records(file_name:str):
+    try:
+        logger = get_run_logger()
+        engine = create_engine(os.getenv("DB_URL"), echo = True)
+        # Try connecting to the database to check connectivity
+        with engine.connect() as _:
+            pass
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    except Exception as conn_err:
+        logger.error(f"Database connection failed: {conn_err} 🤒")
+        raise
+    with SessionLocal() as session:
+        try:
+            deleted_count = (
+                session.query(Company)
+                .filter(Company.source == file_name)
+                .delete(synchronize_session=False)
+            )
+            session.commit()
+            logger.info(f"Successfully deleted {deleted_count} records 🗑️ for the source {file_name}")
+        except Exception as e:
+            logger.error(f"FAILED - remove_existing_records for {file_name} - {e}")
+            raise
+
+
 @task(log_prints=True)
 def load_data(transformed_df:pd.DataFrame):
     logger = get_run_logger()
@@ -71,9 +97,10 @@ def load_data(transformed_df:pd.DataFrame):
 
 @flow(flow_run_name="process-file-{file_name}")
 def process_file(file_name:str):
-    raw_df = read_data.submit(file_name).result()
-    transformed_df = transform_data.submit(raw_df, file_name).result()
-    load_data.submit(transformed_df)
+    raw_df = read_data(file_name)
+    transformed_df = transform_data(raw_df, file_name)
+    remove_existing_records(file_name)
+    load_data(transformed_df)
 
 @flow(log_prints=True)
 def load_company_details_flow(file_names:list[FILESOURCE]):
@@ -84,4 +111,4 @@ def load_company_details_flow(file_names:list[FILESOURCE]):
 
 
 if __name__ == "__main__":
-    load_company_details_flow(file_names=["ind_nifty50_list.csv", "ind_niftymidcap150_list.csv"])
+    load_company_details_flow(file_names=[FILESOURCE.NIFTY50, FILESOURCE.NIFTY_MIDCAP_150])
