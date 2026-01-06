@@ -88,7 +88,8 @@ def load_daily_pricing(symbol:str, isin_code:str, period: str):
     pricing_history = extract_pricing(symbol, period)
     transformed_pricing_history = transform_pricing(pricing_history, symbol, isin_code)
     logger.info(transformed_pricing_history.info())
-    load_pricing(transformed_pricing_history)
+    if len(transformed_pricing_history) > 0:
+        load_pricing(transformed_pricing_history)
 
 if __name__ == "__main__":
     load_daily_pricing(symbol="RELINFRA.NS", isin_code="INE036A01016", period='1d')
