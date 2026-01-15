@@ -20,7 +20,7 @@ services:
       retries: 5
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`localhost`)"
+      - "traefik.http.routers.app.rule=Host(`market-mitra.online`)"
       - "traefik.http.routers.app.entrypoints=web"
 
 
