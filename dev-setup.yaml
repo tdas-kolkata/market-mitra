@@ -6,8 +6,6 @@ services:
       PREFECT_API_DATABASE_CONNECTION_URL: ${PREFECT_API_DATABASE_CONNECTION_URL}
       PREFECT_API_URL: ${PREFECT_API_URL}
       PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS: ${PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS}
-    ports:
-      - "4200:4200"
     expose:
       - 4200
     restart: unless-stopped
@@ -21,7 +19,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.app.rule=Host(`market-mitra.online`)"
-      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.app.tls=true"
+      - "traefik.http.services.app.loadbalancer.server.port=4200"
 
 
   prefect-worker:
