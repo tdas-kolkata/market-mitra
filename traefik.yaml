@@ -1,6 +1,10 @@
 entrypoints:
   web:
     address: ":80"
+  websecure:
+    address: ":443"
+    http:
+      tls: true
 
 api:
   dashboard: true
@@ -9,3 +13,12 @@ api:
 providers:
   docker:
     exposedByDefault: false
+
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: tamaldas177@gmail.com
+      storage: acme.json
+      httpChallenge:
+        entryPoint: web
