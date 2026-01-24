@@ -1,4 +1,5 @@
 from prefect import flow
+from prefect.schedules import Cron
 
 if __name__ == '__main__':
     flow.from_source(
@@ -8,5 +9,9 @@ if __name__ == '__main__':
         name = "regular-cleanup",
         work_pool_name = "etl-workers",
         description = "cleans up the old data to clear the database",
-        tags = ["db", "cleanup"]
+        tags = ["db", "cleanup"],
+        schedule = Cron(
+            "0 23 * * 1-5",          # 11:00 PM every day
+            timezone="Asia/Kolkata"
+        )
     )

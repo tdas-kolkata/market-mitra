@@ -11,7 +11,7 @@ if __name__ == "__main__":
         name="pricing-load",
         tags=["pricing", "python"],
         schedule=Cron(
-            "5 23 * * 1-5",          # 11:00 PM every day
+            "5 23 * * 1-5",          # 11:05 PM every day
             timezone="Asia/Kolkata"
         )
     )
