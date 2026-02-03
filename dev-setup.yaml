@@ -18,7 +18,7 @@ services:
       retries: 5
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`market-mitra.online`)"
+      - "traefik.http.routers.app.rule=Host(`prefect.market-mitra.online`)"
       - "traefik.http.routers.app.entrypoints=websecure"
       - "traefik.http.routers.app.tls.certresolver=letsencrypt"
       - "traefik.http.routers.app.tls=true"
