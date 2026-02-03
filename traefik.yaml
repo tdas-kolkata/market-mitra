@@ -13,7 +13,6 @@ entrypoints:
 
 api:
   dashboard: true
-  insecure: true
 
 providers:
   docker:
@@ -27,10 +26,3 @@ certificatesResolvers:
       storage: acme.json
       httpChallenge:
         entryPoint: web
-
-http:
-  middlewares:
-    auth:
-      basicAuth:
-        users:
-          - admin:$apr1$foc5waKR$jdyFMrXUjIDDN1T/EG5hW
