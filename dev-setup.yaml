@@ -73,19 +73,19 @@ services:
       - "traefik.http.services.whoami.loadbalancer.server.port=80"
   
   authelia:
-  image: authelia/authelia:latest
-  container_name: authelia_container
-  volumes:
-    - ./authelia:/config
-  environment:
-    - TZ=Asia/Kolkata
-    - AUTHELIA_JWT_SECRET=${AUTHELIA_JWT_SECRET}
-    - AUTHELIA_SESSION_SECRET=${AUTHELIA_SESSION_SECRET}
-  labels:
-    - "traefik.enable=true"
-    # Authelia portal
-    - "traefik.http.routers.authelia.rule=Host(`auth.market-mitra.online`)"
-    - "traefik.http.routers.authelia.entrypoints=websecure"
-    - "traefik.http.routers.authelia.tls=true"
-    - "traefik.http.routers.authelia.certresolver=letsencrypt"
-    - "traefik.http.services.authelia.loadbalancer.server.port=9091"
+    image: authelia/authelia:latest
+    container_name: authelia_container
+    volumes:
+      - ./authelia:/config
+    environment:
+      - TZ=Asia/Kolkata
+      - AUTHELIA_JWT_SECRET=${AUTHELIA_JWT_SECRET}
+      - AUTHELIA_SESSION_SECRET=${AUTHELIA_SESSION_SECRET}
+    labels:
+      - "traefik.enable=true"
+      # Authelia portal
+      - "traefik.http.routers.authelia.rule=Host(`auth.market-mitra.online`)"
+      - "traefik.http.routers.authelia.entrypoints=websecure"
+      - "traefik.http.routers.authelia.tls=true"
+      - "traefik.http.routers.authelia.certresolver=letsencrypt"
+      - "traefik.http.services.authelia.loadbalancer.server.port=9091"
