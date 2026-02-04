@@ -1,0 +1,46 @@
+http:
+  routers:
+
+    whoami:
+      rule: Host(`whoami.market-mitra.online`)
+      entryPoints:
+        - websecure
+      middlewares:
+        - authelia
+      service: whoami
+      tls:
+        certResolver: letsencrypt
+
+    prefect:
+      rule: Host(`prefect.market-mitra.online`)
+      entryPoints:
+        - websecure
+      middlewares:
+        - authelia
+      service: prefect
+      tls:
+        certResolver: letsencrypt
+
+    authelia:
+      rule: Host(`auth.market-mitra.online`)
+      entryPoints:
+        - websecure
+      service: authelia
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    whoami:
+      loadBalancer:
+        servers:
+          - url: http://whoami:80
+
+    prefect:
+      loadBalancer:
+        servers:
+          - url: http://prefect:4200
+
+    authelia:
+      loadBalancer:
+        servers:
+          - url: http://authelia:9091

@@ -18,11 +18,6 @@ services:
       retries: 5
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`prefect.market-mitra.online`)"
-      - "traefik.http.routers.app.entrypoints=websecure"
-      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.app.tls=true"
-      - "traefik.http.services.app.loadbalancer.server.port=4200"
 
 
   prefect-worker:
@@ -47,6 +42,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./traefik/dynamic:/etc/traefik/dynamic:ro
       - ./letsencrypt:/letsencrypt
       - ./acme.json:/acme.json
     ports:
@@ -61,12 +57,6 @@ services:
     container_name: traefik_whoami_container
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.market-mitra.online`)"
-      - "traefik.http.routers.whoami.entrypoints=websecure"
-      - "traefik.http.routers.whoami.tls=true"
-      - "traefik.http.routers.whoami.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.whoami.middlewares=authelia@file"
-      - "traefik.http.services.whoami.loadbalancer.server.port=80"
   
   authelia:
     image: authelia/authelia:latest
@@ -80,9 +70,3 @@ services:
       - AUTHELIA_STORAGE_ENCRYPTION_KEY=${AUTHELIA_STORAGE_ENCRYPTION_KEY}
     labels:
       - "traefik.enable=true"
-      # Authelia portal
-      - "traefik.http.routers.authelia.rule=Host(`auth.market-mitra.online`)"
-      - "traefik.http.routers.authelia.entrypoints=websecure"
-      - "traefik.http.routers.authelia.tls=true"
-      - "traefik.http.routers.authelia.certresolver=letsencrypt"
-      - "traefik.http.services.authelia.loadbalancer.server.port=9091"
