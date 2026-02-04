@@ -1,0 +1,7 @@
+users:
+  tamal:
+    displayname: "Tamal Das"
+    password: "$argon2id$v=19$m=65536,t=3,p=4$x09957fCzCIjMp4hhF1swQ$j4YqlWwPogHpzYxOqBanXTComw8/HxuZMxIDJZwc0Qw"
+    email: tamaldas177@gmail.com
+    groups:
+      - admins

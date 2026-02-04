@@ -55,6 +55,10 @@ services:
     depends_on:
       prefect:
         condition: service_healthy
+    labels:
+      - "traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.market-mitra.online/"
+      - "traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true"
+      - "traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email"
 
   whoami:
     image: traefik/whoami
@@ -65,5 +69,23 @@ services:
       - "traefik.http.routers.whoami.entrypoints=websecure"
       - "traefik.http.routers.whoami.tls=true"
       - "traefik.http.routers.whoami.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.whoami.middlewares=authelia@docker"
       - "traefik.http.services.whoami.loadbalancer.server.port=80"
-    
+  
+  authelia:
+  image: authelia/authelia:latest
+  container_name: authelia_container
+  volumes:
+    - ./authelia:/config
+  environment:
+    - TZ=Asia/Kolkata
+    - AUTHELIA_JWT_SECRET=${AUTHELIA_JWT_SECRET}
+    - AUTHELIA_SESSION_SECRET=${AUTHELIA_SESSION_SECRET}
+  labels:
+    - "traefik.enable=true"
+    # Authelia portal
+    - "traefik.http.routers.authelia.rule=Host(`auth.market-mitra.online`)"
+    - "traefik.http.routers.authelia.entrypoints=websecure"
+    - "traefik.http.routers.authelia.tls=true"
+    - "traefik.http.routers.authelia.certresolver=letsencrypt"
+    - "traefik.http.services.authelia.loadbalancer.server.port=9091"
