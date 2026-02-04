@@ -15,6 +15,8 @@ http:
       rule: Host(`prefect.market-mitra.online`)
       entryPoints:
         - websecure
+      middlewares:
+        - authelia
       service: prefect
       tls:
         certResolver: letsencrypt
