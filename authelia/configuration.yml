@@ -22,7 +22,8 @@ session:
   name: authelia_session
   expiration: 1h
   inactivity: 5m
-  domain: market-mitra.online
+  cookies:
+    - domain: market-mitra.online
 
 storage:
   local:
@@ -31,4 +32,8 @@ storage:
 notifier:
   filesystem:
     filename: /config/notification.txt
+
+identity_validation:
+  reset_password:
+    jwt_secret: ${AUTHELIA_JWT_SECRET}
 
