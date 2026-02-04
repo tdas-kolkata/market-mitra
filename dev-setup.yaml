@@ -55,4 +55,15 @@ services:
     depends_on:
       prefect:
         condition: service_healthy
+
+  whoami:
+    image: traefik/whoami
+    container_name: traefik_whoami_container
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.market-mitra.online`)"
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "traefik.http.routers.whoami.tls=true"
+      - "traefik.http.routers.whoami.certresolver=letsencrypt"
+      - "traefik.http.services.whoami.loadbalancer.server.port=80"
     
