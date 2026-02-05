@@ -34,5 +34,13 @@ storage:
     path: /config/db.sqlite3
 
 notifier:
-  filesystem:
-    filename: /config/notification.txt
+  # filesystem:
+  #   filename: /config/notification.txt
+  smtp:
+    address: smtp-relay.brevo.com
+    port: 587
+    timeout: 15s
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    sender: ${SMTP_USERNAME}
+    subject: "[Market Mitra] {title}"
