@@ -35,8 +35,7 @@ storage:
 
 notifier:
   smtp:
-    address: smtp-relay.brevo.com
-    port: 587
+    address: smtp-relay.brevo.com:587
     timeout: 15s
     username: ${SMTP_USERNAME}
     password: ${SMTP_PASSWORD}
