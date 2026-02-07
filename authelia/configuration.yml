@@ -40,6 +40,6 @@ notifier:
     timeout: 15s
     username: ${SMTP_USERNAME}
     password: ${SMTP_PASSWORD}
-    sender: ${SMTP_USERNAME}
+    sender: "Authelia <tamaldas177@gmail.com>"
     identifier: authelia
     subject: "[Authelia] {title}"
