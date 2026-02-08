@@ -30,15 +30,11 @@ session:
       default_redirection_url: https://whoami.market-mitra.online
 
 storage:
+  encryption_key: ${AUTHELIA_STORAGE_ENCRYPTION_KEY}
   local:
     path: /config/db.sqlite3
 
 notifier:
-  smtp:
-    address: smtp-relay.brevo.com:587
-    timeout: 15s
-    username: ${SMTP_USERNAME}
-    password: ${SMTP_PASSWORD}
-    sender: "Authelia <tamaldas177@gmail.com>"
-    identifier: authelia
-    subject: "[Authelia] {title}"
+  # disable_startup_check: true
+  filesystem:
+    filename: '/config/notification.txt'
