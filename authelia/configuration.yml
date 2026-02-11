@@ -6,16 +6,11 @@ server:
 log:
   level: info
 
-# 🔐 No local passwords, no reset flow
 authentication_backend:
-  disable_reset_password: true
+  password_reset:
+    disable: true
   file:
     path: /config/users.yml
-
-# 🚫 Explicitly disable reset password to avoid jwt_secret requirement
-identity_validation:
-  reset_password:
-    disabled: true
 
 access_control:
   default_policy: deny
@@ -45,16 +40,13 @@ notifier:
 identity_providers:
   oidc:
     hmac_secret: ${AUTHELIA_OIDC_HMAC_SECRET}
-    issuers:
-      - issuer: https://auth.market-mitra.online
-    clients:
+    providers:
       - id: google
-        description: Google Login
         client_id: ${GOOGLE_CLIENT_ID}
-        secret: ${GOOGLE_CLIENT_SECRET}
-        redirect_uris:
-          - https://auth.market-mitra.online/api/oidc/callback
+        client_secret: ${GOOGLE_CLIENT_SECRET}
+        discovery_url: https://accounts.google.com
         scopes:
           - openid
           - profile
           - email
+        username_claim: email
