@@ -25,7 +25,7 @@ http:
       rule: Host(`auth.market-mitra.online`)
       entryPoints:
         - websecure
-      service: authelia
+      service: oauth-proxy
       tls:
         certResolver: letsencrypt
 
@@ -40,7 +40,7 @@ http:
         servers:
           - url: http://prefect:4200
 
-    authelia:
+    oauth-proxy:
       loadBalancer:
         servers:
-          - url: http://authelia:9091
+          - url: http://oauth2-proxy:4180

@@ -1,11 +1,9 @@
 http:
   middlewares:
-    authelia:
+    oauth2-auth:
       forwardAuth:
-        address: http://authelia:9091/api/verify?rd=https://auth.market-mitra.online/
+        address: http://http://oauth2-proxy:4180/oauth2/auth
         trustForwardHeader: true
         authResponseHeaders:
-          - Remote-User
-          - Remote-Groups
-          - Remote-Email
-          - Remote-Name
+          - X-Auth-Request-Email
+          - X-Auth-Request-User
