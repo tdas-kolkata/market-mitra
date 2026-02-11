@@ -7,10 +7,12 @@ log:
   level: info
 
 authentication_backend:
-  password_reset:
-    disable: true
   file:
     path: /config/users.yml
+
+identity_validation:
+  reset_password:
+    jwt_secret: ${AUTHELIA_JWT_SECRET}
 
 access_control:
   default_policy: deny
@@ -22,7 +24,6 @@ session:
   name: authelia_session
   expiration: 1h
   inactivity: 5m
-  secret: ${AUTHELIA_SESSION_SECRET}
   cookies:
     - domain: market-mitra.online
       authelia_url: https://auth.market-mitra.online
@@ -34,19 +35,6 @@ storage:
     path: /config/db.sqlite3
 
 notifier:
+  # disable_startup_check: true
   filesystem:
-    filename: /config/notification.txt
-
-identity_providers:
-  oidc:
-    hmac_secret: ${AUTHELIA_OIDC_HMAC_SECRET}
-    providers:
-      - id: google
-        client_id: ${GOOGLE_CLIENT_ID}
-        client_secret: ${GOOGLE_CLIENT_SECRET}
-        discovery_url: https://accounts.google.com
-        scopes:
-          - openid
-          - profile
-          - email
-        username_claim: email
+    filename: '/config/notification.txt'
