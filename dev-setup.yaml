@@ -73,3 +73,20 @@ services:
       - SMTP_PASSWORD=${SMTP_PASSWORD}
     labels:
       - "traefik.enable=true"
+  
+  lldap:
+    image: lldap/lldap:latest
+    container_name: lldap
+    restart: unless-stopped
+    ports:
+      - "3890:3890"   # LDAP
+      - "17170:17170" # Web UI
+    volumes:
+      - ./lldap/data:/data
+    environment:
+      - LLDAP_JWT_SECRET=${LLDAP_JWT_SECRET}
+      - LLDAP_LDAP_BASE_DN=dc=market-mitra,dc=online
+      - LLDAP_LDAP_USER_PASS=${LLDAP_LDAP_USER_PASS}
+      - LLDAP_LDAP_USER_DN=${LLDAP_LDAP_USER_DN}
+    labels:
+      - "traefik.enable=true"
