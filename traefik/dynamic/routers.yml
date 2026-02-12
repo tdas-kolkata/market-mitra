@@ -33,7 +33,7 @@ http:
       rule: Host(`dap.market-mitra.online`)
       entryPoints:
         - websecure
-      service: lldp
+      service: lldap
       middlewares:
         - authelia
       tls:
