@@ -34,6 +34,8 @@ http:
       entryPoints:
         - websecure
       service: lldp
+      middlewares:
+        - authelia
       tls:
         certResolver: letsencrypt
 
