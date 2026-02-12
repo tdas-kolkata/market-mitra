@@ -29,8 +29,8 @@ http:
       tls:
         certResolver: letsencrypt
 
-    lldp:
-      rule: Host(`lldp.market-mitra.online`)
+    lldap:
+      rule: Host(`lldap.market-mitra.online`)
       entryPoints:
         - websecure
       service: lldp
@@ -53,7 +53,7 @@ http:
         servers:
           - url: http://authelia:9091
 
-    lldp:
+    lldap:
       loadBalancer:
         servers:
-          - url: http://lldp:17170
+          - url: http://lldap:17170
