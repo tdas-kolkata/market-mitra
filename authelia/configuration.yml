@@ -22,6 +22,10 @@ access_control:
       policy: one_factor
       subject: 
         - "group:admins"
+    - domain: "traefik.market-mitra.online"
+      policy: one_factor
+      subject: 
+        - "group:admins"
     - domain: "whoami.market-mitra.online"
       policy: one_factor
     - domain: "auth.market-mitra.online"
