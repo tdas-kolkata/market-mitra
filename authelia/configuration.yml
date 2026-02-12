@@ -26,7 +26,7 @@ access_control:
       policy: one_factor
     - domain: "auth.market-mitra.online"
       policy: one_factor
-    - domain: "lldap.market-mitra.online"
+    - domain: "dap.market-mitra.online"
       policy: one_factor
       subject: 
         - "group:admins"

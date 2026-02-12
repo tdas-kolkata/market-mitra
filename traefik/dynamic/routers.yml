@@ -30,7 +30,7 @@ http:
         certResolver: letsencrypt
 
     lldap:
-      rule: Host(`lldap.market-mitra.online`)
+      rule: Host(`dap.market-mitra.online`)
       entryPoints:
         - websecure
       service: lldp
