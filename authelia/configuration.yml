@@ -38,7 +38,3 @@ notifier:
   # disable_startup_check: true
   filesystem:
     filename: '/config/notification.txt'
-
-branding:
-  logo: /assets/logo.png
-  name: Market Mitra
