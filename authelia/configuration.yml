@@ -26,6 +26,10 @@ access_control:
       policy: one_factor
     - domain: "auth.market-mitra.online"
       policy: one_factor
+    - domain: "lldp.market-mitra.online"
+      policy: one_factor
+      subject: 
+        - "group:admins"
 
 session:
   name: authelia_session
