@@ -18,7 +18,13 @@ identity_validation:
 access_control:
   default_policy: deny
   rules:
-    - domain: "*.market-mitra.online"
+    - domain: "prefect.market-mitra.online"
+      policy: one_factor
+      subject: 
+        - "group:admins"
+    - domain: "whoami.market-mitra.online"
+      policy: one_factor
+    - domain: "auth.market-mitra.online"
       policy: one_factor
 
 session:
