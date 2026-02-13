@@ -51,5 +51,10 @@ storage:
 
 notifier:
   # disable_startup_check: true
-  filesystem:
-    filename: '/config/notification.txt'
+  # filesystem:
+  #   filename: '/config/notification.txt'
+  smtp:
+    address: 'submission://smtp.gmail.com:587'
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    sender: ${SMTP_USERNAME}
