@@ -45,7 +45,7 @@ access_control:
     - domain: "auth.market-mitra.online"
       policy: one_factor
     - domain: "dap.market-mitra.online"
-      policy: one_factor
+      policy: two_factor
       subject: 
         - "group:admin"
 
