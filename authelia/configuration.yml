@@ -8,8 +8,22 @@ log:
   level: info
 
 authentication_backend:
-  file:
-    path: /config/users.yml
+  ldap:
+    implementation: custom
+    address: ldap://lldap:3890
+    timeout: 5s
+    start_tls: false
+    base_dn: dc=market-mitra,dc=online
+    additional_users_dn: ou=people
+    users_filter: "(&(objectClass=person)(uid={input}))"
+    additional_groups_dn: ou=groups
+    groups_filter: "(member={dn})"
+    user: uid=admin,ou=people,dc=market-mitra,dc=online
+    attributes:
+      username: uid
+      display_name: displayName
+      mail: mail
+      group_name: cn
 
 identity_validation:
   reset_password:
