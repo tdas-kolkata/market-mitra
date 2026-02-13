@@ -50,11 +50,6 @@ storage:
     path: /config/db.sqlite3
 
 notifier:
-  # disable_startup_check: true
-  # filesystem:
-  #   filename: '/config/notification.txt'
   smtp:
-    address: 'submission://smtp.gmail.com:587'
-    username: ${SMTP_USERNAME}
-    password: ${SMTP_PASSWORD}
-    sender: Tamal Das <tamaldas177@gmail.com>
+    address: 'smtp-relay.brevo.com:587'
+    sender: 'Tamal Das <tamaldas177@gmail.com>'
