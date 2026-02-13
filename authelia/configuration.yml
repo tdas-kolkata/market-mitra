@@ -37,7 +37,7 @@ access_control:
       subject: 
         - "group:admin"
     - domain: "traefik.market-mitra.online"
-      policy: one_factor
+      policy: two_factor
       subject: 
         - "group:admin"
     - domain: "whoami.market-mitra.online"
@@ -45,7 +45,7 @@ access_control:
     - domain: "auth.market-mitra.online"
       policy: one_factor
     - domain: "dap.market-mitra.online"
-      policy: two_factor
+      policy: one_factor
       subject: 
         - "group:admin"
 
