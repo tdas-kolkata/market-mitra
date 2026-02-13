@@ -57,4 +57,4 @@ notifier:
     address: 'submission://smtp.gmail.com:587'
     username: ${SMTP_USERNAME}
     password: ${SMTP_PASSWORD}
-    sender: ${SMTP_USERNAME}
+    sender: Tamal Das <tamaldas177@gmail.com>
