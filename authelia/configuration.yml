@@ -35,11 +35,11 @@ access_control:
     - domain: "prefect.market-mitra.online"
       policy: one_factor
       subject: 
-        - "group:admins"
+        - "group:admin"
     - domain: "traefik.market-mitra.online"
       policy: one_factor
       subject: 
-        - "group:admins"
+        - "group:admin"
     - domain: "whoami.market-mitra.online"
       policy: one_factor
     - domain: "auth.market-mitra.online"
@@ -47,7 +47,7 @@ access_control:
     - domain: "dap.market-mitra.online"
       policy: one_factor
       subject: 
-        - "group:admins"
+        - "group:admin"
 
 session:
   name: authelia_session
