@@ -15,7 +15,7 @@ authentication_backend:
     start_tls: false
     base_dn: dc=market-mitra,dc=online
     additional_users_dn: ou=people
-    users_filter: "(&(objectClass=person)(uid={input}))"
+    users_filter: "(&(objectClass=person)({username_attribute}={input}))"
     additional_groups_dn: ou=groups
     groups_filter: "(member={dn})"
     user: uid=admin,ou=people,dc=market-mitra,dc=online
