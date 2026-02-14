@@ -9,3 +9,4 @@ http:
           - Remote-Groups
           - Remote-Email
           - Remote-Name
+          - Authorization
