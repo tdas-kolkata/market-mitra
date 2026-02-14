@@ -20,6 +20,16 @@ http:
       service: prefect
       tls:
         certResolver: letsencrypt
+      priority: 10
+
+    prefect-api:
+      rule: Host(`prefect.market-mitra.online`) && PathPrefix(`/api`) && Headers(`X-API-Key`, `${PREFECT_API_KEY}`)
+      entryPoints:
+        - websecure
+      service: prefect
+      tls:
+        certResolver: letsencrypt
+      priority: 100
 
     authelia:
       rule: Host(`auth.market-mitra.online`)
