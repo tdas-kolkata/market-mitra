@@ -9,3 +9,11 @@ http:
           - Remote-Groups
           - Remote-Email
           - Remote-Name
+
+    api-key-auth:
+      forwardAuth:
+        address: http://api-key-validator:8080/validate
+        trustForwardHeader: true
+        authResponseHeaders:
+          - Remote-User
+          - Remote-Groups

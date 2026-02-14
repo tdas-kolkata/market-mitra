@@ -93,3 +93,14 @@ services:
       - LLDAP_LDAP_USER_DN=${LLDAP_LDAP_USER_DN}
     labels:
       - "traefik.enable=true"
+
+  api-key-validator:
+    build:
+      context: ./middlewares/api-key-validator
+      dockerfile: Dockerfile
+    container_name: api-key-validator-container
+    restart: unless-stopped
+    environment:
+      PREFECT_API_KEY: ${PREFECT_API_KEY}
+    labels:
+      - "traefik.enable=true"
