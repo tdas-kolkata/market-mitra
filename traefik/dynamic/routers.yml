@@ -13,7 +13,7 @@ http:
 
     # Authelia has been by passed to access the service by another machine with fixed api key
     prefect-api:
-      rule: Host(`prefect-api.market-mitra.online`) && PathPrefix(`/api`) && Header(`X-API-Key`, `${PREFECT_API_KEY}`)
+      rule: Host(`prefect-api.market-mitra.online`) && PathPrefix(`/api`) && Header(`X-API-Key`, `secret`)
       entryPoints:
         - websecure
       service: prefect
