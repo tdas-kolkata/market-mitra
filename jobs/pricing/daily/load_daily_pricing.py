@@ -3,7 +3,6 @@ from prefect import flow, task, get_run_logger
 import yfinance as yf
 import pandas as pd
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 import dotenv
 import sys
 from sqlalchemy.dialects.postgresql import insert
