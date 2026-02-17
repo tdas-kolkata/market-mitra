@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import create_async_engine
 from prefect.deployments import run_deployment
 from daily.load_daily_pricing import load_daily_pricing
+from jobs.update_view import update_view_flow, DB_VIEW
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
 dotenv.load_dotenv(dotenv_path)
@@ -54,6 +55,7 @@ def load_all_daily_pricing(period:str = '1d', mode:RUNMODE = RUNMODE.SYNC):
             )
         if mode == RUNMODE.SYNC:
             load_daily_pricing(company.symbol, company.isin_code, period)
+    update_view_flow(DB_VIEW.RISK_RETURN_VIEW)
 
 if __name__ == '__main__':
     load_all_daily_pricing(period='7d', mode = RUNMODE.SYNC)
