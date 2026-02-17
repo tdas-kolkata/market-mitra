@@ -24,7 +24,7 @@ def update_view_task(view_name: DB_VIEW):
         logger.error(e)
 
 
-@flow(log_prints=True)
+@flow(log_prints=True, flow_run_name="refresh-view-{view_name.value}")
 def update_view_flow(view_name: DB_VIEW):
     update_view_task(view_name)
 
