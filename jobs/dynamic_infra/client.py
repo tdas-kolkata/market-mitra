@@ -88,7 +88,7 @@ if __name__ == '__main__':
     # print(token)
     client = ExcClient(token=token)
 
-    vm_id, public_ipv4 = client.CreateVM(type="t1.nano", name="worker-node-python", ssh_pubkey="td-local")
+    vm_id, public_ipv4 = client.CreateVM(type="t1.small", name="worker-node-python", ssh_pubkey="td-local")
     # client.DestroyVM(vm_id=6140)
     # id = client.ConnectWithVM(vm_id=6144, user="ubuntu")
     # print(id)

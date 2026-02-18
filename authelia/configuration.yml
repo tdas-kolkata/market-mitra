@@ -48,6 +48,8 @@ access_control:
       policy: one_factor
       subject: 
         - "group:admin"
+    - domain: "dashboard.market-mitra.online"
+      policy: bypass
 
 session:
   name: authelia_session

@@ -11,6 +11,16 @@ http:
       tls:
         certResolver: letsencrypt
 
+    dashboard:
+      rule: Host(`dashboard.market-mitra.online`)
+      entryPoints:
+        - websecure
+      middlewares:
+        - authelia
+      service: dashbaord
+      tls:
+        certResolver: letsencrypt
+
     # Authelia has been by passed to access the service by another machine with fixed api key
     prefect-api:
       rule: Host(`prefect-api.market-mitra.online`) && PathPrefix(`/api`)
@@ -70,3 +80,8 @@ http:
       loadBalancer:
         servers:
           - url: http://lldap:17170
+
+    dashbaord:
+      loadBalancer:
+        servers:
+          - url: http://next-dashboard:3000
