@@ -12,7 +12,6 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Next.js standalone mode needs these specific files:
-COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
