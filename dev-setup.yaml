@@ -106,8 +106,7 @@ services:
       - "traefik.enable=true"
 
   next-dashboard:
-    build:
-      image: market-mitra-next-dashboard:latest 
+    image: market-mitra-next-dashboard:latest 
     container_name: next_dashboard_container
     restart: unless-stopped
     environment:
