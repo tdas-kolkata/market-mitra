@@ -105,13 +105,13 @@ services:
     labels:
       - "traefik.enable=true"
 
-  next-dashboard:
-    build:
-      context: ./dashboard
-      dockerfile: Dockerfile
-    container_name: next_dashboard_container
-    restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      NEXT_TELEMETRY_DISABLED: 1
-      DB_URL: ${DB_URL}
+  # next-dashboard:
+  #   build:
+  #     context: ./dashboard
+  #     dockerfile: Dockerfile
+  #   container_name: next_dashboard_container
+  #   restart: unless-stopped
+  #   environment:
+  #     NODE_ENV: production
+  #     NEXT_TELEMETRY_DISABLED: 1
+  #     DB_URL: ${DB_URL}
