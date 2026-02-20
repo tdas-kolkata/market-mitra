@@ -203,6 +203,9 @@ export default function Creator() {
                     <Badge className="bg-green-800 text-green-50 m-2">
                       Prefect
                     </Badge>
+                    <Badge className="bg-green-800 text-green-50 m-2">
+                      Authelia
+                    </Badge>
                   </div>
                   <div className="font-bold p-2">Databases</div>
                   <div>
