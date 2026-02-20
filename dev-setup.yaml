@@ -32,6 +32,7 @@ services:
       PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS: ${PREFECT_TASK_RUN_TAG_CONCURRENCY_SLOT_WAIT_SECONDS}
       DB_URL_ASYNC: ${DB_URL_ASYNC}
       PREFECT_API_DATABASE_CONNECTION_URL: ${PREFECT_API_DATABASE_CONNECTION_URL}
+      PREFECT_SERVER_CSRF_PROTECTION_ENABLED: false
     depends_on:
       prefect:
         condition: service_healthy
@@ -112,5 +113,6 @@ services:
     container_name: next_dashboard_container
     restart: unless-stopped
     environment:
-      - NODE_ENV=production
-      - NEXT_TELEMETRY_DISABLED=1
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: 1
+      DB_URL: ${DB_URL}
