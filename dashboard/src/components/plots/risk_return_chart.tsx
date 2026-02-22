@@ -49,8 +49,8 @@ export default function RiskReturnChart({
     scales: {
       x: {
         type: 'linear',
-        min: 1.2,
-        max: 5,
+        min: 5,
+        max: 80,
         title: {
           display: true,
           text: `Risk Score ${'\u2192'}`,
@@ -66,7 +66,7 @@ export default function RiskReturnChart({
       },
       y: {
         type: 'linear',
-        min: -100,
+        min: -50,
         title: {
           display: true,
           text: `Annualized Return (%) ${'\u2192'}`,
