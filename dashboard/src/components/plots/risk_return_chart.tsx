@@ -13,7 +13,6 @@ import {
 import { Scatter } from 'react-chartjs-2';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import { RiskReturnPlotInterface } from "@/interfaces/risk_return_data_interface";
-import {Badge} from "@/components/ui/badge"
 
 // Register Chart.js components and the zoom plugin
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
@@ -29,19 +28,44 @@ const INDUSTRY_COLORS: Record<string, string> = {
 };
 
 const INDUSTRY_COLORS_TW_CLASS: Record<string, string> = {
-  "nifty50": "bg-indigo-400 m-2",          // #818cf8
-  "niftymidcap150": "bg-emerald-400 m-2",  // #34d399
-  "niftynext50": "bg-amber-400 m-2",      // #fbbf24
-  "niftysmallcap250": "bg-red-400 m-2",    // #f87171
-  "default": "bg-slate-400 m-2"           // #94a3b8
+  "nifty50": "bg-indigo-400",          // #818cf8
+  "niftymidcap150": "bg-emerald-400",  // #34d399
+  "niftynext50": "bg-amber-400",      // #fbbf24
+  "niftysmallcap250": "bg-red-400",    // #f87171
+  "default": "bg-slate-400"           // #94a3b8
 };
+
+import React, { useState } from 'react';
 
 export default function RiskReturnChart({
   data,
 }: {
   data: RiskReturnPlotInterface[];
 }) {
-  
+  // Get all unique sources (industries)
+  const allSources = Array.from(new Set(data.map(d => d.meta?.source || 'Default')));
+  const [selectedSources, setSelectedSources] = useState<Set<string>>(new Set(allSources));
+
+  // Helper to toggle selection
+  const toggleSource = (source: string) => {
+    setSelectedSources(prev => {
+      const next = new Set(prev);
+      if (next.has(source)) {
+        next.delete(source);
+      } else {
+        next.add(source);
+      }
+      return next;
+    });
+  };
+
+  // Helper to select/deselect all
+  const toggleAll = () => {
+    setSelectedSources(prev =>
+      prev.size === allSources.length ? new Set() : new Set(allSources)
+    );
+  };
+
   const options: ChartOptions<'scatter'> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -122,32 +146,53 @@ export default function RiskReturnChart({
     }
   };
 
+  // Group data by meta.source (industry)
+  const groupedData: Record<string, RiskReturnPlotInterface[]> = {};
+  data.forEach((point) => {
+    const source = point.meta?.source || 'Default';
+    if (!groupedData[source]) groupedData[source] = [];
+    groupedData[source].push(point);
+  });
+
+  // Filter datasets based on selectedSources
+  const filteredDatasets = Object.entries(groupedData)
+    .filter(([source]) => selectedSources.has(source))
+    .map(([source, points]) => ({
+      label: source,
+      data: points,
+      backgroundColor: INDUSTRY_COLORS[source] || INDUSTRY_COLORS.Default,
+      pointRadius: 4, // Always 4, not affected by selection
+      pointHoverRadius: 6, // Always 6, not affected by selection
+    }));
+
   const chartData: ChartData<'scatter'> = {
-    datasets: [
-      {
-        label: "Equity Risk-Return",
-        data: data as RiskReturnPlotInterface[], // Chart.js accepts objects with {x, y} and custom fields
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        backgroundColor: (context: any) => { 
-          const industry = (context.raw as RiskReturnPlotInterface)?.meta?.source;
-          return INDUSTRY_COLORS[industry] || INDUSTRY_COLORS.Default;
-        },
-        pointRadius: 6,
-        pointHoverRadius: 8,
-      },
-    ],
+    datasets: filteredDatasets,
   };
 
   return (
     <div className="w-10/12 mx-auto" style={{ height: '600px' }}>
+
       <Scatter options={options} data={chartData} />
-    <div className='flex w-full justify-center'>
-        <Badge className={INDUSTRY_COLORS_TW_CLASS['nifty50']}>Nifty 50</Badge>
-        <Badge className={INDUSTRY_COLORS_TW_CLASS['niftynext50']}>Nifty Next 50</Badge>
-        <Badge className={INDUSTRY_COLORS_TW_CLASS['niftymidcap150']}>Nifty Midcap 150</Badge>
-        <Badge className={INDUSTRY_COLORS_TW_CLASS['niftysmallcap250']}>Nifty Smallcap 250</Badge>
-        <Badge className={INDUSTRY_COLORS_TW_CLASS['default']}>Others</Badge>
-    </div>
+            {/* Multi-selectable group control */}
+      <div className="flex justify-center gap-2 py-4 my-5 flex-wrap">
+        <button
+          className={`px-3 py-1 rounded-full border border-slate-400 transition-colors duration-100 font-bold min-w-22.5 h-9 leading-none shadow-sm ${selectedSources.size === allSources.length ? 'bg-slate-700 text-white' : 'bg-slate-100 text-slate-900'}`}
+          style={{ boxSizing: 'border-box', height: '36px', fontWeight: 700, lineHeight: '1.2', textShadow: selectedSources.size === allSources.length ? '0 1px 2px #0006' : 'none' }}
+          onClick={toggleAll}
+        >
+          All
+        </button>
+        {allSources.map((source) => (
+          <button
+            key={source}
+            className={`px-3 py-1 rounded-full border border-slate-400 transition-colors duration-100 font-bold min-w-22.5h-9 leading-none shadow-sm ${selectedSources.has(source) ? (INDUSTRY_COLORS_TW_CLASS[source] + ' text-white') : 'bg-slate-100 text-slate-900'}`}
+            style={{ boxSizing: 'border-box', height: '36px', fontWeight: 700, lineHeight: '1.2', textShadow: selectedSources.has(source) ? '0 1px 2px #0006' : 'none' }}
+            onClick={() => toggleSource(source)}
+          >
+            {source.charAt(0).toUpperCase() + source.slice(1)}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

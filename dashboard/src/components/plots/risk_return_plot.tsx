@@ -6,7 +6,7 @@ const RiskReturnChart = dynamic(
   () => import('@/components/plots/risk_return_chart'),
   { 
     ssr: false,
-    loading: () => <div className="h-150 w-full bg-slate-800 animate-pulse rounded-xl" />
+    loading: () => <div className="h-200 w-full bg-slate-800 animate-pulse rounded-xl" />
   }
 );
 
