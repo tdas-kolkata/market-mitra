@@ -7,6 +7,7 @@ http:
         - websecure
       middlewares:
         - authelia
+        - enterprise-security
       service: whoami
       tls:
         certResolver: letsencrypt
@@ -17,6 +18,7 @@ http:
         - websecure
       middlewares:
         - authelia
+        - enterprise-security
       service: dashbaord
       tls:
         certResolver: letsencrypt
@@ -29,6 +31,7 @@ http:
       service: prefect
       middlewares: 
         - api-key-auth
+        - enterprise-security
       tls:
         certResolver: letsencrypt
 
@@ -36,6 +39,7 @@ http:
       rule: Host(`prefect.market-mitra.online`)
       entryPoints:
         - websecure
+        - enterprise-security
       middlewares:
         - authelia
       service: prefect
@@ -46,6 +50,7 @@ http:
       rule: Host(`auth.market-mitra.online`)
       entryPoints:
         - websecure
+        - enterprise-security
       service: authelia
       tls:
         certResolver: letsencrypt
@@ -57,6 +62,7 @@ http:
       service: lldap
       middlewares:
         - authelia
+        - enterprise-security
       tls:
         certResolver: letsencrypt
 

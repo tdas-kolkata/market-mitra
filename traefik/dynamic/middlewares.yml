@@ -17,3 +17,29 @@ http:
         authResponseHeaders:
           - Remote-User
           - Remote-Groups
+    
+    enterprise-security:
+      headers:
+        # 1. Fixes: X-Content-Type-Options
+        contentTypeNosniff: true
+        
+        # 2. Fixes: X-Frame-Options (Prevents clickjacking)
+        frameDeny: true
+        
+        # 3. Fixes: Referrer Policy
+        referrerPolicy: "strict-origin-when-cross-origin"
+        
+        # 4. Fixes: Strict Transport Security (HSTS)
+        # 31536000 = 1 year. Includes subdomains and allows preloading.
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+
+        # 5. Fixes: Content Security Policy (CSP)
+        # Note: This is a strict policy. If your site uses external scripts 
+        # (like Google Analytics), you must add their domains below.
+        contentSecurityPolicy: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; object-src 'none';"
+
+        # Bonus: Browser XSS Filter (though largely superseded by CSP)
+        browserXssFilter: true
