@@ -26,9 +26,14 @@ http:
         # 2. Fixes: X-Frame-Options (Prevents clickjacking)
         frameDeny: true
         
-        # 3. Fixes: Referrer Policy
-        referrerPolicy: "strict-origin-when-cross-origin"
-        
+        accessControlAllowMethods:
+          - "GET"
+          - "OPTIONS"
+          - "POST"
+        accessControlAllowOriginList:
+          - "https://prefect.market-mitra.online"
+          - "https://auth.market-mitra.online"
+      
         # 4. Fixes: Strict Transport Security (HSTS)
         # 31536000 = 1 year. Includes subdomains and allows preloading.
         stsSeconds: 31536000
