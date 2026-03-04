@@ -39,9 +39,9 @@ http:
       rule: Host(`prefect.market-mitra.online`)
       entryPoints:
         - websecure
-        - enterprise-security
       middlewares:
         - authelia
+        - enterprise-security
       service: prefect
       tls:
         certResolver: letsencrypt
@@ -50,8 +50,9 @@ http:
       rule: Host(`auth.market-mitra.online`)
       entryPoints:
         - websecure
-        - enterprise-security
       service: authelia
+      middlewares:
+        - enterprise-security
       tls:
         certResolver: letsencrypt
 
