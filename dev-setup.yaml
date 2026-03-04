@@ -106,7 +106,9 @@ services:
       - "traefik.enable=true"
 
   next-dashboard:
-    image: market-mitra-next-dashboard:latest 
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
     container_name: next_dashboard_container
     restart: unless-stopped
     environment:
