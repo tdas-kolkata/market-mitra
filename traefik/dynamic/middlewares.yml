@@ -40,11 +40,11 @@ http:
         stsIncludeSubdomains: true
         stsPreload: true
         forceSTSHeader: true
-
-        # 5. Fixes: Content Security Policy (CSP)
-        # Note: This is a strict policy. If your site uses external scripts 
-        # (like Google Analytics), you must add their domains below.
-        contentSecurityPolicy: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; object-src 'none';"
-
         # Bonus: Browser XSS Filter (though largely superseded by CSP)
         browserXssFilter: true
+    
+    content-blocker:
+      headers:
+        # Note: This is a strict policy. If your site uses external scripts 
+        # (like Google Analytics), you must add their domains below.
+        contentSecurityPolicy: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; object-src 'none'; font-src 'self' https://fonts.googleapis.com ; manifest-src 'self' https://auth.market-mitra.online; worker-src 'self' blob:;"
