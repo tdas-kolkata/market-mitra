@@ -1,7 +1,7 @@
 drop MATERIALIZED view if exists risk_return_view;
 create MATERIALIZED VIEW risk_return_view AS
 with var as (
-	select distinct v.stock , stddev(v.pct_change) as risk, mean(v.pct_change) as avg_return from
+	select distinct v.stock , stddev(v.pct_change) as risk, avg(v.pct_change) as avg_return from
 	(	
 		select p.* ,(p.close - LAG(p.close) OVER (PARTITION BY p.stock ORDER BY p.date))/LAG(p.close) OVER (PARTITION BY p.stock ORDER BY p.date) * 100 as pct_change 
 		from prices p where p.dividends = 0 order by p."date" desc
